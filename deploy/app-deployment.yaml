@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookish-bliss-api
+  namespace: bookish-bliss
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookish-bliss-api
+  template:
+    metadata:
+      labels:
+        app: bookish-bliss-api
+    spec:
+      initContainers:
+        - name: bookish-bliss-api-migrator
+          image: bookish-bliss-api-migrator:latest
+          command: [ 'sh' ]
+          args: [ '-c' , 'goose postgres postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable up']
+          env:
+            - name: DB_HOST
+              value: postgres
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              value: bookishbliss
+            - name: DB_PASSWORD
+              value: password
+            - name: DB_NAME
+              value: bookish-bliss
+      containers:
+        - name: bookish-bliss-api
+          image: bookish-bliss-api:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: DB_HOST
+              value: postgres
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              value: bookishbliss
+            - name: DB_PASSWORD
+              value: password
+            - name: DB_NAME
+              value: bookish-bliss

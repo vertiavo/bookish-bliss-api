@@ -1,0 +1,57 @@
+-- +goose Up
+-- +goose StatementBegin
+INSERT INTO books (title, author_id, genre_id, year)
+VALUES ('Pride and Prejudice', 1, 6, 1813),
+       ('Emma', 1, 6, 1815),
+       ('Adventures of Huckleberry Finn', 2, 14, 1884),
+       ('The Adventures of Tom Sawyer', 2, 14, 1876),
+       ('Great Expectations', 3, 10, 1861),
+       ('A Tale of Two Cities', 3, 10, 1859),
+       ('War and Peace', 4, 10, 1869),
+       ('Anna Karenina', 4, 6, 1877),
+       ('1984', 5, 1, 1949),
+       ('Animal Farm', 5, 1, 1945),
+       ('Murder on the Orient Express', 6, 3, 1934),
+       ('The Mysterious Affair at Styles', 6, 3, 1920),
+       ('Harry Potter and the Philosopher''s Stone', 7, 4, 1997),
+       ('Harry Potter and the Chamber of Secrets', 7, 4, 1998),
+       ('The Great Gatsby', 8, 1, 1925),
+       ('Tender is the Night', 8, 1, 1934),
+       ('The Old Man and the Sea', 9, 1, 1952),
+       ('A Farewell to Arms', 9, 14, 1929),
+       ('The Hobbit', 10, 4, 1937),
+       ('The Lord of the Rings', 10, 4, 1954),
+       ('Sense and Sensibility', 1, 6, 1811),
+       ('Mansfield Park', 1, 6, 1814),
+       ('The Prince and the Pauper', 2, 19, 1881),
+       ('David Copperfield', 3, 10, 1850),
+       ('Bleak House', 3, 10, 1853),
+       ('Resurrection', 4, 10, 1899),
+       ('Coming Up for Air', 5, 1, 1939),
+       ('The Secret Adversary', 6, 3, 1922),
+       ('Harry Potter and the Prisoner of Azkaban', 7, 4, 1999),
+       ('Harry Potter and the Goblet of Fire', 7, 4, 2000),
+       ('This Side of Paradise', 8, 1, 1920),
+       ('For Whom the Bell Tolls', 9, 14, 1940),
+       ('The Two Towers', 10, 4, 1954),
+       ('Return of the King', 10, 4, 1955),
+       ('Northanger Abbey', 1, 6, 1817),
+       ('The Innocents Abroad', 2, 14, 1869),
+       ('Oliver Twist', 3, 10, 1837),
+       ('The Brothers Karamazov', 4, 10, 1880),
+       ('Down and Out in Paris and London', 5, 11, 1933),
+       ('The Murder of Roger Ackroyd', 6, 3, 1926),
+       ('Harry Potter and the Order of the Phoenix', 7, 4, 2003),
+       ('The Beautiful and Damned', 8, 1, 1922),
+       ('To Have and Have Not', 9, 14, 1937),
+       ('The Silmarillion', 10, 4, 1977),
+       ('The Casual Vacancy', 7, 1, 2012),
+       ('The Cuckoo''s Calling', 7, 3, 2013),
+       ('Go Set a Watchman', 8, 1, 2015),
+       ('The Sun Also Rises', 9, 14, 1926);
+-- +goose StatementEnd
+
+-- +goose Down
+-- +goose StatementBegin
+TRUNCATE books CASCADE;
+-- +goose StatementEnd
