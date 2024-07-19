@@ -1,3 +1,10 @@
+# Build binary for Docker image
+local_resource(
+    'bookish-bliss-api-compile',
+    'go build -o bookish-bliss-api ./cmd/bookishbliss/main.go',
+    deps=['./cmd', './internal' , './pkg']
+)
+
 # Docker build for Go application
 docker_build('bookish-bliss-api:latest', '.')
 docker_build('bookish-bliss-api-migrator:latest', '.', target='migrator')

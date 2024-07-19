@@ -1,0 +1,134 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+version: 2
+
+project_name: bookish-bliss-api
+builds:
+  - main: ./cmd/bookishbliss
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w
+
+archives:
+  - format: tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    files:
+      - LICENSE
+      - README.md
+
+dockers:
+  # Main application AMD64 images
+  - image_templates:
+      - "ghcr.io/vertiavo/{{.ProjectName}}:{{ .Tag }}-amd64"
+      - "ghcr.io/vertiavo/{{.ProjectName}}:v{{ .Major }}-amd64"
+      - "ghcr.io/vertiavo/{{.ProjectName}}:v{{ .Major }}.{{ .Minor }}-amd64"
+      - "ghcr.io/vertiavo/{{.ProjectName}}:latest-amd64"
+    dockerfile: Dockerfile
+    use: buildx
+    build_flag_templates:
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--platform=linux/amd64"
+  # Main application ARM64 images
+  - image_templates:
+      - "ghcr.io/vertiavo/{{.ProjectName}}:{{ .Tag }}-arm64"
+      - "ghcr.io/vertiavo/{{.ProjectName}}:v{{ .Major }}-arm64"
+      - "ghcr.io/vertiavo/{{.ProjectName}}:v{{ .Major }}.{{ .Minor }}-arm64"
+      - "ghcr.io/vertiavo/{{.ProjectName}}:latest-arm64"
+    dockerfile: Dockerfile
+    use: buildx
+    goarch: arm64
+    build_flag_templates:
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--platform=linux/arm64"
+  # Migrator AMD64 images
+  - image_templates:
+      - "ghcr.io/vertiavo/{{.ProjectName}}-migrator:{{ .Tag }}-amd64"
+      - "ghcr.io/vertiavo/{{.ProjectName}}-migrator:v{{ .Major }}-amd64"
+      - "ghcr.io/vertiavo/{{.ProjectName}}-migrator:v{{ .Major }}.{{ .Minor }}-amd64"
+      - "ghcr.io/vertiavo/{{.ProjectName}}-migrator:latest-amd64"
+    dockerfile: Dockerfile
+    use: buildx
+    build_flag_templates:
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--platform=linux/amd64"
+      - "--target=migrator"
+    extra_files:
+      - db
+  # Migrator ARM64 images
+  - image_templates:
+      - "ghcr.io/vertiavo/{{.ProjectName}}-migrator:{{ .Tag }}-arm64"
+      - "ghcr.io/vertiavo/{{.ProjectName}}-migrator:v{{ .Major }}-arm64"
+      - "ghcr.io/vertiavo/{{.ProjectName}}-migrator:v{{ .Major }}.{{ .Minor }}-arm64"
+      - "ghcr.io/vertiavo/{{.ProjectName}}-migrator:latest-arm64"
+    dockerfile: Dockerfile
+    use: buildx
+    goarch: arm64
+    build_flag_templates:
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--platform=linux/arm64"
+      - "--target=migrator"
+    extra_files:
+      - db
+
+docker_manifests:
+  # Main application manifests
+  - name_template: "ghcr.io/vertiavo/{{.ProjectName}}:{{ .Tag }}"
+    image_templates:
+      - "ghcr.io/vertiavo/{{.ProjectName}}:{{ .Tag }}-amd64"
+      - "ghcr.io/vertiavo/{{.ProjectName}}:{{ .Tag }}-arm64"
+  - name_template: "ghcr.io/vertiavo/{{.ProjectName}}:v{{ .Major }}"
+    image_templates:
+      - "ghcr.io/vertiavo/{{.ProjectName}}:v{{ .Major }}-amd64"
+      - "ghcr.io/vertiavo/{{.ProjectName}}:v{{ .Major }}-arm64"
+  - name_template: "ghcr.io/vertiavo/{{.ProjectName}}:v{{ .Major }}.{{ .Minor }}"
+    image_templates:
+      - "ghcr.io/vertiavo/{{.ProjectName}}:v{{ .Major }}.{{ .Minor }}-amd64"
+      - "ghcr.io/vertiavo/{{.ProjectName}}:v{{ .Major }}.{{ .Minor }}-arm64"
+  - name_template: "ghcr.io/vertiavo/{{.ProjectName}}:latest"
+    image_templates:
+      - "ghcr.io/vertiavo/{{.ProjectName}}:latest-amd64"
+      - "ghcr.io/vertiavo/{{.ProjectName}}:latest-arm64"
+  # Migrator manifests
+  - name_template: "ghcr.io/vertiavo/{{.ProjectName}}-migrator:{{ .Tag }}"
+    image_templates:
+      - "ghcr.io/vertiavo/{{.ProjectName}}-migrator:{{ .Tag }}-amd64"
+      - "ghcr.io/vertiavo/{{.ProjectName}}-migrator:{{ .Tag }}-arm64"
+  - name_template: "ghcr.io/vertiavo/{{.ProjectName}}-migrator:v{{ .Major }}"
+    image_templates:
+      - "ghcr.io/vertiavo/{{.ProjectName}}-migrator:v{{ .Major }}-amd64"
+      - "ghcr.io/vertiavo/{{.ProjectName}}-migrator:v{{ .Major }}-arm64"
+  - name_template: "ghcr.io/vertiavo/{{.ProjectName}}-migrator:v{{ .Major }}.{{ .Minor }}"
+    image_templates:
+      - "ghcr.io/vertiavo/{{.ProjectName}}-migrator:v{{ .Major }}.{{ .Minor }}-amd64"
+      - "ghcr.io/vertiavo/{{.ProjectName}}-migrator:v{{ .Major }}.{{ .Minor }}-arm64"
+  - name_template: "ghcr.io/vertiavo/{{.ProjectName}}-migrator:latest"
+    image_templates:
+      - "ghcr.io/vertiavo/{{.ProjectName}}-migrator:latest-amd64"
+      - "ghcr.io/vertiavo/{{.ProjectName}}-migrator:latest-arm64"
+
+checksum:
+  name_template: "{{ .ProjectName }}_checksums.txt"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
