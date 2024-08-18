@@ -9,14 +9,8 @@ local_resource(
 docker_build('bookish-bliss-api:latest', '.')
 docker_build('bookish-bliss-api-migrator:latest', '.', target='migrator')
 
-# Kubernetes resources
-k8s_yaml([
-    'deploy/namespace.yaml',
-    'deploy/postgres-deployment.yaml',
-    'deploy/postgres-service.yaml',
-    'deploy/app-deployment.yaml',
-    'deploy/app-service.yaml'
-])
+# Kubernetes resources using Kustomize for local
+k8s_yaml(kustomize('deploy/dev'))
 
 # Forward port for local access
 k8s_resource('bookish-bliss-api', port_forwards=3000)

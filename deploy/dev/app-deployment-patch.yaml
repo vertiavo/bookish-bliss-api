@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookish-bliss-api
+  namespace: bookish-bliss
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: bookish-bliss-api-migrator
+          image: bookish-bliss-api-migrator:latest
+      containers:
+        - name: bookish-bliss-api
+          image: bookish-bliss-api:latest
+          env:
+            - name: ENV
+              value: "dev"
